@@ -20,7 +20,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/v1/books")
+@RequestMapping()
 public class BookController {
 
     private final BookRepository bookRepository;
@@ -29,7 +29,7 @@ public class BookController {
         this.bookRepository = bookRepository;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v1/books", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public List<Book> get(@And({
             @Spec(path = "name", params = "name", spec = Like.class),
@@ -42,5 +42,10 @@ public class BookController {
             @Spec(path = "createDate", params = {"createDateGt", "createDateLt"}, spec = Between.class)
     }) Specification<Book> specification, Sort sort) {
         return bookRepository.searchBook(specification, sort);
+    }
+
+    @GetMapping(value = "/v2/books", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Book> get(BookFilter bookFilter) {
+        return bookRepository.searchBook(bookFilter);
     }
 }

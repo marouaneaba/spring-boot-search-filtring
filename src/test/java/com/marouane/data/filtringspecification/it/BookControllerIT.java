@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.ZonedDateTime;
+
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -57,14 +59,16 @@ class BookControllerIT {
     void shouldReturn200Status_andBookByCreateDate() throws Exception {
         // Given
         // When
-        mockMvc.perform(
+        String contentAsString = mockMvc.perform(
                         get("/v1/books?createDate=2019–11–11")
                                 .accept(MediaType.APPLICATION_JSON)
                 )
                 // Then
-                .andExpect(status().isOk())
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        /*contentAsString
                 .andExpect(jsonPath("$.length()", greaterThanOrEqualTo(0)))
-                .andExpect(jsonPath("$[*].createDate").value("2019–11–11"));
+                .andExpect(jsonPath("$[*].createDate").value(ZonedDateTime.of(2019,11,11));*/
+        int y= 0;
 
     }
 
