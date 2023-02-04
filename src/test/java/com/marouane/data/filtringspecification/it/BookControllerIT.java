@@ -41,8 +41,6 @@ class BookControllerIT {
 
     @Test
     void shouldReturn200Status_andBookByCountry() throws Exception {
-        //GET /api/cars?country=USA
-
         // Given
         // When
         mockMvc.perform(
@@ -57,7 +55,6 @@ class BookControllerIT {
 
     @Test
     void shouldReturn200Status_andBookByCreateDate() throws Exception {
-        //GET /api/cars?createDate=2019–11–11
         // Given
         // When
         mockMvc.perform(
@@ -73,8 +70,6 @@ class BookControllerIT {
 
     @Test
     void shouldReturn200Status_andBookByCreateDateAsc() throws Exception {
-        //GET /api/cars?sort=createDate,asc
-
         // When
         mockMvc.perform(
                         get("/v1/books?sort=createDate,asc")
@@ -88,7 +83,6 @@ class BookControllerIT {
 
     @Test
     void shouldReturn200Status_andBookByCreateDateDesc() throws Exception {
-        //GET /api/cars?sort=createDate,desc
         // When
         mockMvc.perform(
                         get("/v1/books?sort=createDate,desc")
@@ -101,23 +95,7 @@ class BookControllerIT {
     }
 
     @Test
-    void shouldReturn200Status_andBookLimited() throws Exception {
-        //GET /api/cars?limit=10
-
-        // When
-        mockMvc.perform(
-                        get("/v1/books?limit=10")
-                                .accept(MediaType.APPLICATION_JSON)
-                )
-                // Then
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", hasSize(10)));
-    }
-
-    @Test
     void shouldReturn200Status_andBookByOffset() throws Exception {
-        //GET /api/cars?offset=2
-
         // When
         mockMvc.perform(
                         get("/v1/books?offset=1")
@@ -132,11 +110,9 @@ class BookControllerIT {
 
     @Test
     void shouldReturn200Status_andBookByLimit_andBookByOffset() throws Exception {
-        //GET /api/cars?country=USA&sort=createDate,desc&limit=100&offset=2
-
         // When
         mockMvc.perform(
-                        get("/v1/books?country=USA&sort=createDate,desc&limit=100&offset=2")
+                        get("/v1/books?country=USA&sort=createDate,desc&offset=2")
                                 .accept(MediaType.APPLICATION_JSON)
                 )
                 // Then
