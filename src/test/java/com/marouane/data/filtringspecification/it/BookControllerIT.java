@@ -1,8 +1,9 @@
 package com.marouane.data.filtringspecification.it;
-import com.marouane.data.filtringspecification.book.application.controller.BookController;
+import com.marouane.data.filtringspecification.book.infrastructure.repository.BookDataBaseRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -14,23 +15,28 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = BookController.class)
+
+@AutoConfigureMockMvc
+@SpringBootTest
 class BookControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private BookDataBaseRepository bookDataBaseRepository;
 
     @Test
     void shouldReturn200Status_andBookList() throws Exception {
         // Given
         // When
         mockMvc.perform(
-                        get("/books")
+                        get("/v1/books")
                                 .accept(MediaType.APPLICATION_JSON)
                 )
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", greaterThanOrEqualTo(0)));
+                .andExpect(jsonPath("$.length()", greaterThanOrEqualTo(0)));
     }
 
     @Test
@@ -40,13 +46,13 @@ class BookControllerIT {
         // Given
         // When
         mockMvc.perform(
-                        get("/books?country=USA")
+                        get("/v1/books?country=USA")
                                 .accept(MediaType.APPLICATION_JSON)
                 )
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", greaterThanOrEqualTo(0)))
-                .andExpect(jsonPath("$[*].country", equalTo("USA")));
+                .andExpect(jsonPath("$.length()", greaterThanOrEqualTo(0)))
+                .andExpect(jsonPath("$.[*].country").value("USA"));
     }
 
     @Test
@@ -55,13 +61,13 @@ class BookControllerIT {
         // Given
         // When
         mockMvc.perform(
-                        get("/books?createDate=2019–11–11")
+                        get("/v1/books?createDate=2019–11–11")
                                 .accept(MediaType.APPLICATION_JSON)
                 )
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", greaterThanOrEqualTo(0)))
-                .andExpect(jsonPath("$[*].createDate", equalTo("2019–11–11")));
+                .andExpect(jsonPath("$.length()", greaterThanOrEqualTo(0)))
+                .andExpect(jsonPath("$[*].createDate").value("2019–11–11"));
 
     }
 
@@ -71,12 +77,12 @@ class BookControllerIT {
 
         // When
         mockMvc.perform(
-                        get("/books?sort=createDate,asc")
+                        get("/v1/books?sort=createDate,asc")
                                 .accept(MediaType.APPLICATION_JSON)
                 )
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", greaterThanOrEqualTo(0)))
+                .andExpect(jsonPath("$.length()", greaterThanOrEqualTo(0)))
                 .andExpect(jsonPath("$[*].createDate", stringContainsInOrder("2019–11–11", "2019–11–14", "2019–11–16")));
     }
 
@@ -85,12 +91,12 @@ class BookControllerIT {
         //GET /api/cars?sort=createDate,desc
         // When
         mockMvc.perform(
-                        get("/books?sort=createDate,desc")
+                        get("/v1/books?sort=createDate,desc")
                                 .accept(MediaType.APPLICATION_JSON)
                 )
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", greaterThanOrEqualTo(0)))
+                .andExpect(jsonPath("$.length()", greaterThanOrEqualTo(0)))
                 .andExpect(jsonPath("$[*].createDate", stringContainsInOrder("2019–11–16", "2019–11–14", "2019–11–11")));
     }
 
@@ -100,12 +106,12 @@ class BookControllerIT {
 
         // When
         mockMvc.perform(
-                        get("/books?limit=10")
+                        get("/v1/books?limit=10")
                                 .accept(MediaType.APPLICATION_JSON)
                 )
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(10)));
+                .andExpect(jsonPath("$.length()", hasSize(10)));
     }
 
     @Test
@@ -114,12 +120,12 @@ class BookControllerIT {
 
         // When
         mockMvc.perform(
-                        get("/books?offset=1")
+                        get("/v1/books?offset=1")
                                 .accept(MediaType.APPLICATION_JSON)
                 )
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$.length()", hasSize(1)))
                 .andExpect(jsonPath("$[*].createDate", equalTo("2019–11–11")));
     }
 
@@ -130,12 +136,12 @@ class BookControllerIT {
 
         // When
         mockMvc.perform(
-                        get("/books?country=USA&sort=createDate,desc&limit=100&offset=2")
+                        get("/v1/books?country=USA&sort=createDate,desc&limit=100&offset=2")
                                 .accept(MediaType.APPLICATION_JSON)
                 )
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", greaterThanOrEqualTo(0)))
+                .andExpect(jsonPath("$.length()", greaterThanOrEqualTo(0)))
                 .andExpect(jsonPath("$[*].createDate", equalTo("2019–11–11")));
     }
 

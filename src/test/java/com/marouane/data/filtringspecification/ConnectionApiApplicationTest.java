@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Api service should")
 @SpringBootTest
 @AutoConfigureMockMvc
-class ConnectionApiApplicationTests {
+class ConnectionApiApplicationTest {
 
     @Autowired
     private MockMvc mockMvc;
