@@ -38,12 +38,21 @@ public class BookEntity {
     private String country;
 
     @Column
-    private int stock;
+    private Integer stock;
 
     @Column
     private ZonedDateTime createDate;
 
     public BookEntity() {
+    }
+
+    public BookEntity(String name, String isbn, BookType bookType, String country, int stock, ZonedDateTime createDate) {
+        this.name = name;
+        this.isbn = isbn;
+        this.bookType = bookType;
+        this.country = country;
+        this.stock = stock;
+        this.createDate = createDate;
     }
 
     public static Book toBook(BookEntity from) {

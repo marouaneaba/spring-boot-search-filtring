@@ -48,4 +48,9 @@ public class BookController {
     public List<Book> get(BookFilter bookFilter) {
         return bookRepository.searchBook(bookFilter);
     }
+
+    @GetMapping(value = "/v3/books", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Book> getQueryByExample(BookFilter bookFilter) {
+        return bookRepository.searchBookWithByExample(bookFilter);
+    }
 }

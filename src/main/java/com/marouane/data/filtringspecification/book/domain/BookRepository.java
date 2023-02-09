@@ -12,4 +12,6 @@ public interface BookRepository {
 
     List<Book> searchBook(BookFilter bookFilter);
 
+    List<Book> searchBookWithByExample(BookFilter bookFilter);
+
 }
