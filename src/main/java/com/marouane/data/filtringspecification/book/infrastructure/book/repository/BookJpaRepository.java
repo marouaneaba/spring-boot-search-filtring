@@ -1,6 +1,6 @@
-package com.marouane.data.filtringspecification.book.infrastructure.repository;
+package com.marouane.data.filtringspecification.book.infrastructure.book.repository;
 
-import com.marouane.data.filtringspecification.book.infrastructure.entity.BookEntity;
+import com.marouane.data.filtringspecification.book.infrastructure.book.entity.BookEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

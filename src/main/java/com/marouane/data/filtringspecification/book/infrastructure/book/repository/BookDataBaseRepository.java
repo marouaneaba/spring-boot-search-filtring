@@ -1,17 +1,16 @@
-package com.marouane.data.filtringspecification.book.infrastructure.repository;
+package com.marouane.data.filtringspecification.book.infrastructure.book.repository;
 
 import com.marouane.data.filtringspecification.book.application.controller.BookFilter;
 import com.marouane.data.filtringspecification.book.domain.Book;
 import com.marouane.data.filtringspecification.book.domain.BookRepository;
-import com.marouane.data.filtringspecification.book.infrastructure.BookSpecification;
-import com.marouane.data.filtringspecification.book.infrastructure.entity.BookEntity;
+import com.marouane.data.filtringspecification.book.infrastructure.book.BookCriteriaBuilder;
+import com.marouane.data.filtringspecification.book.infrastructure.book.BookSpecification;
+import com.marouane.data.filtringspecification.book.infrastructure.book.entity.BookEntity;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @Component
@@ -43,12 +42,11 @@ public class BookDataBaseRepository implements BookRepository {
 
     @Override
     public List<Book> searchBookWithByExample(BookFilter bookFilter) {
-        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues();
-        BookEntity bookEntity = new BookEntity(bookFilter.name(), bookFilter.isbn(), bookFilter.bookType(), bookFilter.country(), bookFilter.stock(), ZonedDateTime.parse(bookFilter.createDate()));
-        Example<BookEntity> exampleQuery = Example.of(bookEntity, matcher);
-        List<Sort.Order> orders = bookFilter.sort().stream().map(sortFiled -> new Sort.Order(Sort.Direction.DESC, sortFiled)).toList();
+        Example<BookEntity> exampleQuery = BookCriteriaBuilder.buildBookSearchCriteriaByFilter(bookFilter);
 
-        List<BookEntity> bookEntities = bookJpaRepository.findAll(exampleQuery, Sort.by(orders));
+        Sort ordersFilter = BookCriteriaBuilder.buildSortOrderByFilter(bookFilter.sort(), Sort.Direction.DESC);
+
+        List<BookEntity> bookEntities = bookJpaRepository.findAll(exampleQuery, ordersFilter);
 
         return bookEntities.stream()
                 .map(BookEntity::toBook)

@@ -1,4 +1,4 @@
-package com.marouane.data.filtringspecification.book.infrastructure.entity;
+package com.marouane.data.filtringspecification.book.infrastructure.book.entity;
 
 import com.marouane.data.filtringspecification.book.domain.Book;
 import com.marouane.data.filtringspecification.book.domain.BookType;
